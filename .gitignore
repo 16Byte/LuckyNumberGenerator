@@ -42,3 +42,9 @@
 
 #vscode
 *.vscode
+
+#OS
+.MS_Store
+
+#executable
+lottery

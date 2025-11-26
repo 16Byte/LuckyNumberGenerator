@@ -15,5 +15,5 @@ class FileManager
 
     private: 
         const std::string powerballPath = "powerball.csv";
-        const std::string megamillionsPath = "";
+        const std::string megamillionsPath = "megamillions.csv";
 };

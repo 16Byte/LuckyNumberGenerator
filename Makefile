@@ -1,12 +1,13 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -g
+LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 TARGET = lottery
 OBJS = main.o MegaMillionsNumberGenerator.o PowerBallNumberGenerator.o FileManager.o LuckyNumberGenerator.o
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 main.o: main.cpp MegaMillionsNumberGenerator.hpp PowerBallNumberGenerator.hpp LuckyNumberGenerator.hpp FileManager.hpp
 	$(CXX) $(CXXFLAGS) -c main.cpp
