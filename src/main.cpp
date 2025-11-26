@@ -1,9 +1,14 @@
+#define RAYGUI_IMPLEMENTATION
 #include "MegaMillionsNumberGenerator.hpp"
 #include "PowerBallNumberGenerator.hpp"
 #include "FileManager.hpp"
 #include <iostream>
 #include "raylib.h"
 #include <string>
+#include "raygui.h"
+
+
+
 
 using namespace std;
 
@@ -64,11 +69,15 @@ void GenerateNumbersUntilQualityMet(LuckyNumberGenerator* numGen, double targetQ
 
 int main()
 {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 1000;
+    const int screenHeight = 600;
 
     InitWindow(screenWidth, screenHeight, "Lucky Number Generator");
     SetTargetFPS(60);
+
+    // Load lottery logos
+    Texture2D powerballLogo = LoadTexture("Assets/Sprites/powerball.png");
+    Texture2D megaMillionsLogo = LoadTexture("Assets/Sprites/mega_millions.png");
 
     MegaMillionsNumberGenerator* MMNumGen = new MegaMillionsNumberGenerator();
     PowerBallNumberGenerator* PBNumGen = new PowerBallNumberGenerator();
@@ -77,41 +86,52 @@ int main()
     InitMegaMillions(fm, MMNumGen);
     InitPowerBall(fm, PBNumGen);
 
-    vector<int> luckyNumbers;
-
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(GRAY);
-        DrawText("Lucky Number Generator", 190, 200, 20, LIGHTGRAY);
+        ClearBackground((Color){240, 240, 250, 255});
 
-        //update
-        if(IsKeyReleased(KEY_E))
-        { //Powerball test
-            cout << "Powerball Numbers" << endl;
-            luckyNumbers = PrintLuckyNumbers(PBNumGen);
-        }
+        // Title
+        DrawText("Lucky Number Generator", 250, 50, 40, DARKBLUE);
+        DrawRectangle(250, 100, 500, 3, DARKBLUE);
 
-        if (IsKeyReleased(KEY_R))
-        { //MegaMillions test
-            cout << "MegaMillions Numbers" << endl;
-            luckyNumbers = PrintLuckyNumbers(MMNumGen);
-        }
-
-        string luckyNumbers_string = "Lucky Numbers: ";
-        for(size_t i = 0; i < luckyNumbers.size(); i++)
-        {
-            luckyNumbers_string += to_string(luckyNumbers[i]);
-            if(i < luckyNumbers.size() - 1) luckyNumbers_string += ", ";
-        }
-
-        DrawText(luckyNumbers_string.c_str(), 190, 100, 20, WHITE);
+        // Logo section
+        float logoScale = 1.0f;
+        float logoY = 140.0f;
+        float logoSpacing = 150.0f;
         
+        DrawTextureEx(powerballLogo, (Vector2){(screenWidth/2) + logoSpacing - (powerballLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // PowerBall logo
+        DrawTextureEx(megaMillionsLogo, (Vector2){(screenWidth/2) - logoSpacing - (megaMillionsLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // MegaMillions logo  
+
+        // Buttons
+        float buttonY = 380.0f;
+        float buttonWidth = 300.0f;
+        float buttonHeight = 50.0f;
+        float buttonX = (screenWidth - buttonWidth) / 2.0f;
+        
+        if (GuiButton((Rectangle){buttonX, buttonY, buttonWidth, buttonHeight}, "Generate PowerBall Numbers"))
+        {
+            // TODO: Navigate to PowerBall screen
+        }
+        
+        if (GuiButton((Rectangle){buttonX, buttonY + 70, buttonWidth, buttonHeight}, "Generate MegaMillions Numbers"))
+        {
+            // TODO: Navigate to MegaMillions screen
+        }
+        
+        if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Quit Game"))
+        {
+            break; // Exit game loop
+        }
+
         EndDrawing();
     }
+    
+    // Cleanup
+    UnloadTexture(powerballLogo);
+    UnloadTexture(megaMillionsLogo);
     CloseWindow();
 
-    //Garbage Collection
     delete PBNumGen;
     delete MMNumGen;
     return 0;

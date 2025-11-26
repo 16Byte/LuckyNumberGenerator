@@ -14,6 +14,6 @@ class FileManager
         std::vector<std::vector<int>> GetFileContents(LottoType lottoType);
 
     private: 
-        const std::string powerballPath = "powerball.csv";
-        const std::string megamillionsPath = "megamillions.csv";
+        const std::string powerballPath = "Assets/Data/powerball.csv";
+        const std::string megamillionsPath = "Assets/Data/megamillions.csv";
 };

@@ -1,30 +1,34 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -g
+CXXFLAGS = -std=c++17 -Wall -g -Iinclude
 LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 TARGET = lottery
-OBJS = main.o MegaMillionsNumberGenerator.o PowerBallNumberGenerator.o FileManager.o LuckyNumberGenerator.o
+OBJDIR = Object
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/MegaMillionsNumberGenerator.o $(OBJDIR)/PowerBallNumberGenerator.o $(OBJDIR)/FileManager.o $(OBJDIR)/LuckyNumberGenerator.o
 
-all: $(TARGET)
+all: $(OBJDIR) $(TARGET)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
-main.o: main.cpp MegaMillionsNumberGenerator.hpp PowerBallNumberGenerator.hpp LuckyNumberGenerator.hpp FileManager.hpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+$(OBJDIR)/main.o: src/main.cpp include/MegaMillionsNumberGenerator.hpp include/PowerBallNumberGenerator.hpp include/LuckyNumberGenerator.hpp include/FileManager.hpp include/raygui.h
+	$(CXX) $(CXXFLAGS) -c src/main.cpp -o $(OBJDIR)/main.o
 
-MegaMillionsNumberGenerator.o: MegaMillionsNumberGenerator.cpp MegaMillionsNumberGenerator.hpp LuckyNumberGenerator.hpp
-	$(CXX) $(CXXFLAGS) -c MegaMillionsNumberGenerator.cpp
+$(OBJDIR)/MegaMillionsNumberGenerator.o: src/MegaMillionsNumberGenerator.cpp include/MegaMillionsNumberGenerator.hpp include/LuckyNumberGenerator.hpp
+	$(CXX) $(CXXFLAGS) -c src/MegaMillionsNumberGenerator.cpp -o $(OBJDIR)/MegaMillionsNumberGenerator.o
 
-PowerBallNumberGenerator.o: PowerBallNumberGenerator.cpp PowerBallNumberGenerator.hpp LuckyNumberGenerator.hpp
-	$(CXX) $(CXXFLAGS) -c PowerBallNumberGenerator.cpp
+$(OBJDIR)/PowerBallNumberGenerator.o: src/PowerBallNumberGenerator.cpp include/PowerBallNumberGenerator.hpp include/LuckyNumberGenerator.hpp
+	$(CXX) $(CXXFLAGS) -c src/PowerBallNumberGenerator.cpp -o $(OBJDIR)/PowerBallNumberGenerator.o
 
-FileManager.o: FileManager.cpp FileManager.hpp
-	$(CXX) $(CXXFLAGS) -c FileManager.cpp
+$(OBJDIR)/FileManager.o: src/FileManager.cpp include/FileManager.hpp
+	$(CXX) $(CXXFLAGS) -c src/FileManager.cpp -o $(OBJDIR)/FileManager.o
 
-LuckyNumberGenerator.o: LuckyNumberGenerator.cpp LuckyNumberGenerator.hpp
-	$(CXX) $(CXXFLAGS) -c LuckyNumberGenerator.cpp
+$(OBJDIR)/LuckyNumberGenerator.o: src/LuckyNumberGenerator.cpp include/LuckyNumberGenerator.hpp
+	$(CXX) $(CXXFLAGS) -c src/LuckyNumberGenerator.cpp -o $(OBJDIR)/LuckyNumberGenerator.o
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(OBJDIR) $(TARGET)
 
 .PHONY: all clean
