@@ -57,7 +57,7 @@ vector<map<int, int>> LuckyNumberGenerator::CalculatePositionFrequency() const
  */
 double LuckyNumberGenerator::CalculateOdds(const vector<int>& generatedNumbers) const
 {
-    if (history.empty()) return 0.0;
+    if (history.empty()) return -1.0;
     
     auto posFreq = GetPositionFrequency();
     double totalDraws = history.size();
@@ -83,22 +83,18 @@ double LuckyNumberGenerator::CalculateOdds(const vector<int>& generatedNumbers) 
  */
 double LuckyNumberGenerator::CalculateAverageScore(const vector<int>& generatedNumbers) const
 {
-    if (history.empty()) return 0.0;
+    if (history.empty()) return -1.0;
     
     auto posFreq = GetPositionFrequency();
-    double totalDraws = history.size();
-    double sumProbabilities = 0.0;
-    int validPositions = 0;
-    
-    for (size_t pos = 0; pos < generatedNumbers.size() && pos < posFreq.size(); pos++) {
+    double sum = 0.0;
+
+    for (size_t pos = 0; pos < generatedNumbers.size() && pos < posFreq.size(); pos++)
+    {
         int number = generatedNumbers[pos];
         double frequency = posFreq[pos][number];
-        double positionProb = frequency / totalDraws;
-        sumProbabilities += positionProb;
-        validPositions++;
+        sum += frequency;
     }
-    
-    return validPositions > 0 ? (sumProbabilities / validPositions) : 0.0;
+    return sum / (generatedNumbers.size() * 100);
 }
 
 /**
@@ -110,15 +106,15 @@ double LuckyNumberGenerator::CalculateAverageScore(const vector<int>& generatedN
  */
 double LuckyNumberGenerator::GetNumberQualityAtPosition(int number, int position) const
 {
-    if (history.empty()) return 0.0;
+    if (history.empty()) return -1.0;
     
     auto posFreq = GetPositionFrequency();
     if (position < 0 || position >= (int)posFreq.size()) return 0.0;
     
     double frequency = posFreq[position][number];
-    double totalDraws = history.size();
+    //double totalDraws = history[position]; //using the entire data set. Is this the right way? I don't think so.
     
-    return (frequency / totalDraws) * 100.0;
+    return (frequency);
 }
 
 /**

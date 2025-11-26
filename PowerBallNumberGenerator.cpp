@@ -24,8 +24,8 @@ vector<int> PowerBallNumberGenerator::GetNumbers()
     // Convert set to vector (sorted automatically)
     numbers.assign(mainNumbers.begin(), mainNumbers.end());
     
-    // Generate 1 powerball number (1-26)
-    uniform_int_distribution<> powerballDist(1, 26);
+    // Generate 1 powerball number (2-3 since most winners have this as their powerball number)
+    uniform_int_distribution<> powerballDist(2, 3);
     numbers.push_back(powerballDist(gen));
     
     return numbers;
