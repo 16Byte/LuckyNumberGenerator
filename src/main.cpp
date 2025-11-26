@@ -12,6 +12,8 @@
 
 using namespace std;
 
+bool ShouldExitApplication = false;
+
 void InitPowerBall(FileManager fm, PowerBallNumberGenerator* PBNumGen)
 {
     auto powerballHistory = fm.GetFileContents(FileManager::LottoType::PowerBall);
@@ -67,6 +69,42 @@ void GenerateNumbersUntilQualityMet(LuckyNumberGenerator* numGen, double targetQ
     }
 }
 
+void DrawMainMenu(Texture2D powerballLogo, Texture2D megaMillionsLogo, int screenWidth)
+{
+    ClearBackground((Color){240, 240, 250, 255});
+
+    // Title
+    DrawText("Lucky Number Generator", 250, 50, 40, DARKBLUE);
+    DrawRectangle(250, 100, 500, 3, DARKBLUE);
+
+    // Logo section
+    float logoScale = 1.0f;
+    float logoY = 140.0f;
+    float logoSpacing = 150.0f;
+        
+    DrawTextureEx(powerballLogo, (Vector2){(screenWidth/2) + logoSpacing - (powerballLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // PowerBall logo
+    DrawTextureEx(megaMillionsLogo, (Vector2){(screenWidth/2) - logoSpacing - (megaMillionsLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // MegaMillions logo  
+
+    // Buttons
+    float buttonY = 380.0f;
+    float buttonWidth = 300.0f;
+    float buttonHeight = 50.0f;
+    float buttonX = (screenWidth - buttonWidth) / 2.0f;
+        
+    if (GuiButton((Rectangle){buttonX, buttonY, buttonWidth, buttonHeight}, "Generate PowerBall Numbers"))
+    {
+        // TODO: Navigate to PowerBall screen
+    }
+        
+    if (GuiButton((Rectangle){buttonX, buttonY + 70, buttonWidth, buttonHeight}, "Generate MegaMillions Numbers"))
+    {
+        // TODO: Navigate to MegaMillions screen
+    }
+       
+    if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Quit Application"))
+        ShouldExitApplication = true; // Exit application loop
+}
+
 int main()
 {
     const int screenWidth = 1000;
@@ -86,43 +124,14 @@ int main()
     InitMegaMillions(fm, MMNumGen);
     InitPowerBall(fm, PBNumGen);
 
-    while (!WindowShouldClose())
+    while (!ShouldExitApplication) //Application loop
     {
         BeginDrawing();
-        ClearBackground((Color){240, 240, 250, 255});
+        
+        DrawMainMenu(powerballLogo, megaMillionsLogo, screenWidth);
 
-        // Title
-        DrawText("Lucky Number Generator", 250, 50, 40, DARKBLUE);
-        DrawRectangle(250, 100, 500, 3, DARKBLUE);
-
-        // Logo section
-        float logoScale = 1.0f;
-        float logoY = 140.0f;
-        float logoSpacing = 150.0f;
-        
-        DrawTextureEx(powerballLogo, (Vector2){(screenWidth/2) + logoSpacing - (powerballLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // PowerBall logo
-        DrawTextureEx(megaMillionsLogo, (Vector2){(screenWidth/2) - logoSpacing - (megaMillionsLogo.width/2), logoY}, 0.0f, logoScale, WHITE); // MegaMillions logo  
-
-        // Buttons
-        float buttonY = 380.0f;
-        float buttonWidth = 300.0f;
-        float buttonHeight = 50.0f;
-        float buttonX = (screenWidth - buttonWidth) / 2.0f;
-        
-        if (GuiButton((Rectangle){buttonX, buttonY, buttonWidth, buttonHeight}, "Generate PowerBall Numbers"))
-        {
-            // TODO: Navigate to PowerBall screen
-        }
-        
-        if (GuiButton((Rectangle){buttonX, buttonY + 70, buttonWidth, buttonHeight}, "Generate MegaMillions Numbers"))
-        {
-            // TODO: Navigate to MegaMillions screen
-        }
-        
-        if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Quit Game"))
-        {
-            break; // Exit game loop
-        }
+        if(WindowShouldClose())
+            ShouldExitApplication = true;
 
         EndDrawing();
     }
