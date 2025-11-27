@@ -7,11 +7,16 @@
 #include <string>
 #include "raygui.h"
 
-
-
-
 using namespace std;
 
+enum class Scene {
+    Default,
+    MainMenu,
+    PowerBall_Generator,
+    MegaMillions_Generator,
+};
+
+Scene currentScene = Scene::MainMenu;
 bool ShouldExitApplication = false;
 
 void InitPowerBall(FileManager fm, PowerBallNumberGenerator* PBNumGen)
@@ -57,19 +62,13 @@ void GenerateNumbersUntilQualityMet(LuckyNumberGenerator* numGen, double targetQ
     vector<int> luckyNumbers;
 
     if(targetQuality > -1)
-    {
         while(quality < targetQuality)
-        {
             PrintLuckyNumbers(numGen);
-        }
-    }
     else
-    {
         PrintLuckyNumbers(numGen);
-    }
 }
 
-void DrawMainMenu(Texture2D powerballLogo, Texture2D megaMillionsLogo, int screenWidth)
+void DrawMainMenu(Texture2D powerballLogo, Texture2D megaMillionsLogo, int screenWidth, PowerBallNumberGenerator* PBNumGen, MegaMillionsNumberGenerator* MMNumGen)
 {
     ClearBackground((Color){240, 240, 250, 255});
 
@@ -90,19 +89,59 @@ void DrawMainMenu(Texture2D powerballLogo, Texture2D megaMillionsLogo, int scree
     float buttonWidth = 300.0f;
     float buttonHeight = 50.0f;
     float buttonX = (screenWidth - buttonWidth) / 2.0f;
+
+    vector<int> luckyNumbers;
         
     if (GuiButton((Rectangle){buttonX, buttonY, buttonWidth, buttonHeight}, "Generate PowerBall Numbers"))
     {
         // TODO: Navigate to PowerBall screen
+        //luckyNumbers = PrintLuckyNumbers(PBNumGen);
+        currentScene = Scene::PowerBall_Generator;
     }
         
     if (GuiButton((Rectangle){buttonX, buttonY + 70, buttonWidth, buttonHeight}, "Generate MegaMillions Numbers"))
     {
         // TODO: Navigate to MegaMillions screen
+        //luckyNumbers = PrintLuckyNumbers(MMNumGen);
+        currentScene = Scene::MegaMillions_Generator;
     }
        
     if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Quit Application"))
         ShouldExitApplication = true; // Exit application loop
+}
+
+void DrawPowerBallScene(int screenWidth)
+{
+    ClearBackground((Color){240, 240, 250, 255});
+
+    // Title
+    DrawText("PowerBall Number Generator", 250, 50, 40, DARKBLUE);
+    DrawRectangle(250, 100, 500, 3, DARKBLUE);
+
+    float buttonY = 380.0f;
+    float buttonWidth = 300.0f;
+    float buttonHeight = 50.0f;
+    float buttonX = (screenWidth - buttonWidth) / 2.0f;
+
+    if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Main Menu"))
+        currentScene = Scene::MainMenu;
+}
+
+void DrawMegaMillionsScene(int screenWidth)
+{
+    ClearBackground((Color){240, 240, 250, 255});
+
+    // Title
+    DrawText("MegaMillions Number Generator", 250, 50, 40, DARKBLUE);
+    DrawRectangle(250, 100, 500, 3, DARKBLUE);
+
+    float buttonY = 380.0f;
+    float buttonWidth = 300.0f;
+    float buttonHeight = 50.0f;
+    float buttonX = (screenWidth - buttonWidth) / 2.0f;
+
+    if (GuiButton((Rectangle){buttonX, buttonY + 140, buttonWidth, buttonHeight}, "Main Menu"))
+        currentScene = Scene::MainMenu;
 }
 
 int main()
@@ -128,10 +167,24 @@ int main()
     {
         BeginDrawing();
         
-        DrawMainMenu(powerballLogo, megaMillionsLogo, screenWidth);
+        //DrawMainMenu(powerballLogo, megaMillionsLogo, screenWidth, PBNumGen, MMNumGen);
 
         if(WindowShouldClose())
             ShouldExitApplication = true;
+
+        switch (currentScene)
+        {
+            case Scene::Default:
+            case Scene::MainMenu:
+            DrawMainMenu(powerballLogo, megaMillionsLogo, screenWidth, PBNumGen, MMNumGen);
+            break;
+            case Scene::MegaMillions_Generator:
+            DrawMegaMillionsScene(screenWidth);
+            break;
+            case Scene::PowerBall_Generator:
+            DrawPowerBallScene(screenWidth);
+            break;
+        }
 
         EndDrawing();
     }
