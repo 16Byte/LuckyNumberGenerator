@@ -144,3 +144,36 @@ void LuckyNumberGenerator::PrintAllFrequencies() const
         }
     }
 }
+
+/**
+ * Generates and prints a set of lucky numbers with quality scores.
+ * @return Vector of generated lucky numbers
+ * @pre history must be populated via SetHistory() before calling this method
+ */
+vector<int> LuckyNumberGenerator::PrintLuckyNumbers() const
+{
+    vector<int> luckyNumbers = const_cast<LuckyNumberGenerator*>(this)->GetNumbers();
+
+    for (size_t i = 0; i < luckyNumbers.size(); i++) 
+    {
+        string label = (i < 5) ? "Position " + to_string(i+1) : "Mega Ball";
+        double quality = GetNumberQualityAtPosition(luckyNumbers[i], i);
+        cout << label << ": " << luckyNumbers[i] << " (Quality: " << quality << "%)\n";
+    }
+
+    cout << "Overall Average: " << GetOverallAverage(luckyNumbers) << "%\n";
+
+    return luckyNumbers;
+}
+
+/**
+ * Returns an integer average of the quality of the luckyNumbers.
+ * @param luckyNumbers Vector of lottery numbers to evaluate
+ * @return Quality score as an integer percentage (0-100)
+ * @pre history must be populated via SetHistory() before calling this method
+ */
+int LuckyNumberGenerator::GetOverallAverage(const vector<int>& luckyNumbers) const
+{
+    double avgScore = CalculateAverageScore(luckyNumbers);
+    return int(avgScore * 100);
+}

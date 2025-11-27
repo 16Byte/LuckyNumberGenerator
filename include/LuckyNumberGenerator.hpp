@@ -18,6 +18,10 @@ class LuckyNumberGenerator
         double GetNumberQualityAtPosition(int number, int position) const;
         void PrintAllFrequencies() const;
         
+        // High-level operations
+        std::vector<int> PrintLuckyNumbers() const;
+        int GetOverallAverage(const std::vector<int>& luckyNumbers) const;
+        
     protected:
         std::vector<std::vector<int>> history;
         std::map<int, int> CalculateFrequency() const;
