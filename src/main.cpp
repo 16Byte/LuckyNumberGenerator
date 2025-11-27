@@ -19,16 +19,9 @@ enum class Scene {
 Scene currentScene = Scene::MainMenu;
 bool ShouldExitApplication = false;
 
-void InitPowerBall(FileManager fm, PowerBallNumberGenerator* PBNumGen)
+void InitData(FileManager& fm, LuckyNumberGenerator* NumGen, FileManager::LottoType lottoType)
 {
-    auto powerballHistory = fm.GetFileContents(FileManager::LottoType::PowerBall);
-    PBNumGen->SetHistory(powerballHistory);    
-}
-
-void InitMegaMillions(FileManager fm, MegaMillionsNumberGenerator* MMNumGen)
-{
-    auto megaMillionsHistory = fm.GetFileContents(FileManager::LottoType::MegaMillions);
-    MMNumGen->SetHistory(megaMillionsHistory);    
+    NumGen-> SetHistory(fm.GetFileContents(lottoType));
 }
 
 //Returns an integer average of the quality of the luckyNumbers passed through it.
@@ -160,8 +153,8 @@ int main()
     PowerBallNumberGenerator* PBNumGen = new PowerBallNumberGenerator();
     FileManager fm;
 
-    InitMegaMillions(fm, MMNumGen);
-    InitPowerBall(fm, PBNumGen);
+    InitData(fm, MMNumGen, FileManager::LottoType::MegaMillions);
+    InitData(fm, PBNumGen, FileManager::LottoType::PowerBall);
 
     while (!ShouldExitApplication) //Application loop
     {

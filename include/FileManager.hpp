@@ -6,7 +6,6 @@ class FileManager
     public:
         void ReadAndCacheAll();
         enum class LottoType {
-            Default,
             PowerBall,
             MegaMillions,
         };
