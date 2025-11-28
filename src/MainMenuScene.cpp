@@ -9,11 +9,11 @@ MainMenuScene::MainMenuScene(Texture2D powerballLogo, Texture2D megaMillionsLogo
 
 void MainMenuScene::Draw()
 {
-    ClearBackground((Color){240, 240, 250, 255});
+    ClearBackground((Color){0, 0, 0, 255});
 
     // Title
-    DrawText("Lucky Number Generator", 250, 50, 40, DARKBLUE);
-    DrawRectangle(250, 100, 500, 3, DARKBLUE);
+    DrawText("Lucky Number Generator", 250, 50, 40, WHITE);
+    DrawRectangle(250, 100, 500, 3, WHITE);
 
     // Logo section
     float logoScale = 1.0f;

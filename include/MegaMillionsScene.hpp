@@ -15,6 +15,8 @@ class MegaMillionsScene
         int screenWidth;
         SceneManager& sceneManager;
         MegaMillionsNumberGenerator* generator;
+        std::vector<int> luckyNumbers;
+        std::vector<bool> lockedNumbers;
 };
 
 #endif

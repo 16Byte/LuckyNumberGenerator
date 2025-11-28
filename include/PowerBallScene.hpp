@@ -15,6 +15,8 @@ class PowerBallScene
         int screenWidth;
         SceneManager& sceneManager;
         PowerBallNumberGenerator* generator;
+        std::vector<int> luckyNumbers;
+        std::vector<bool> lockedNumbers;
 };
 
 #endif
